@@ -1,27 +1,40 @@
 import { useState, useEffect } from 'react'
 import styles from '../styles/components/Countdown.module.css'
 
+let countdownTimeout: NodeJS.Timeout;
+
 export function Countdown() {
 
-  const [time, setTime] = useState(25 * 60)//calculo para trabalhar com segundos
+  const [time, setTime] = useState(0.1 * 60)//calculo para trabalhar com segundos
   const [active, setActive] = useState(false)
+  const [Finished, setFinished] = useState(false);
 
   const minutes = Math.floor(time / 60); //minutos arredondados
   const seconds = time % 60; //resto do que sobra da divisão da linha de cima torna os segundos 
-  
+
   //verifico se tem começa com dois, pra separar em duas strings diferentes '2' e '5'
   const [minuteLeft, minuteRight] = String(minutes).padStart(2, '0').split('');
   const [secondsLeft, secondsRight] = String(seconds).padStart(2, '0').split('');
 
-  function startCountdown(){
+  function startCountdown() {
     setActive(true);
   }
-  
-  useEffect(() =>{
-    if(active && time > 0){
-      setTimeout(() => {
+
+  function resetCountDown() {
+    clearTimeout(countdownTimeout);
+    setActive(false);
+    setTime(0.1 * 60);
+  }
+
+  //lógica do countdown
+  useEffect(() => {
+    if (active && time > 0) {
+      countdownTimeout = setTimeout(() => {
         setTime(time - 1);
-      },1000)
+      }, 1000)
+    } else if (active && time === 0) {
+      setFinished(true);
+      setActive(false);
     }
   }, [active, time])
 
@@ -42,9 +55,24 @@ export function Countdown() {
         </div>
       </div>
 
-      <button type="button" className={styles.countdownButton} onClick={startCountdown}>
-        Iniciar um ciclo
-      </button>
+      { Finished ? (
+        <button disabled className={styles.countdownButton} >
+          Ciclo encerrado
+        </button>
+      ) : (
+          <>
+            {active ? (
+              <button type="button" className={`${styles.countdownButton} ${styles.ButtonActive}`} onClick={resetCountDown}>
+                Abandonar ciclo
+              </button>
+            ) : (
+                <button type="button" className={styles.countdownButton} onClick={startCountdown}>
+                  Iniciar ciclo
+                </button>
+              )}
+
+          </>
+        ) }
     </div>
 
   )
