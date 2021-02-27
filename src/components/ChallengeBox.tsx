@@ -1,10 +1,24 @@
 import { useContext } from 'react';
 import { ChallengesContext } from '../contexts/ChallengesContext';
+import { CountdownContext } from '../contexts/CountdownContext';
 import styles from '../styles/components/ChallengeBox.module.css'
 
 export function ChallengeBox(){
 
-  const { activeChallenge, resetChalleng } = useContext(ChallengesContext);
+  const { activeChallenge, resetChalleng, completeChallenge } = useContext(ChallengesContext);
+  const { resetCountDown } = useContext(CountdownContext);
+
+
+  function ChallengeSucess () { //função para chamar outras função para simplificar
+    completeChallenge(); //função de desafio completo, aumenta xp pipipopo
+    resetCountDown(); //resetar o contador
+
+  }
+
+  function ChallengeFailed () {
+    resetChalleng();
+    resetCountDown();
+  }
   
   return(
     <div className={styles.ChallengeBoxContainer}>
@@ -24,11 +38,12 @@ export function ChallengeBox(){
             <button 
               type="button"
               className={styles.ButtonFailed}
-              onClick={resetChalleng}> Falhei </button>
+              onClick={ChallengeFailed}> Falhei </button>
 
             <button 
               type="button"
-              className={styles.ButtonComplet}> Completei </button>
+              className={styles.ButtonComplet}
+              onClick={ChallengeSucess}> Completei </button>
           </footer>
 
         </div>
