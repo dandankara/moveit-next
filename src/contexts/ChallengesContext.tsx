@@ -1,4 +1,4 @@
-import {createContext, useState, ReactNode} from 'react';
+import {createContext, useState, ReactNode, useEffect} from 'react';
 
 import challenges from '../../challenges.json';
 
@@ -35,6 +35,10 @@ export function ChallengsProvider({ children }:ChallengProviderProps){
 
   const experienceLevelUp = Math.pow((level + 1) * 4, 2) //calculo feito por rpg para upar de level
 
+  useEffect(()=>{
+    Notification.requestPermission();
+  },[]) //Executa a função somente uma única vez quando existe um array de dependecia
+
   function levelUp(){
     setLevel(level + 1);
   }
@@ -45,6 +49,14 @@ export function ChallengsProvider({ children }:ChallengProviderProps){
     const challeng = challenges[randomChallenge];
 
     setactiveChallenge(challeng);
+
+    new Audio('/notification.mp3').play();
+
+    if(Notification.permission === 'granted') {
+      new Notification('Novo Desafio'), {
+        body: `Valendo ${challeng.amount}XP`
+      }
+    }
 
   }
 
