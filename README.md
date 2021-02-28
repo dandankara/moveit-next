@@ -1,7 +1,4 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-#Moveit-Next
-
-#Nlw04
-
-Projeto em desenvolvimento do Nlw da Rocketseat usando React e Next
+<center>
+  <h1>Move-it</h1>
+  <p>Projeto desenvolvido no NLW#04, usando React + NextJS</p>
+</center>
